@@ -251,30 +251,48 @@
         }
 		else if ([component.tagLabel caseInsensitiveCompare:@"a"] == NSOrderedSame)
 		{
-			if (self.currentSelectedButtonComponentIndex==index)
-			{
-				if (self.selectedLinkAttributes)
-				{
-					[self applyFontAttributes:self.selectedLinkAttributes toText:attrString atPosition:component.position withLength:[component.text length]];
-				}
-				else
-				{
-					[self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
-					[self applyColor:@"#FF0000" toText:attrString atPosition:component.position withLength:[component.text length]];
-				}
-			}
-			else
-			{
-				if (self.linkAttributes)
-				{
-					[self applyFontAttributes:self.linkAttributes toText:attrString atPosition:component.position withLength:[component.text length]];
-				}
-				else
-				{
-					[self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
-					[self applySingleUnderlineText:attrString atPosition:component.position withLength:[component.text length]];
-				}
-			}
+            NSString *font = [component.attributes objectForKey:@"face"];
+            if (!font) {
+                
+                if (self.currentSelectedButtonComponentIndex==index)
+                {
+                    if (self.selectedLinkAttributes)
+                    {
+                        [self applyFontAttributes:self.selectedLinkAttributes toText:attrString atPosition:component.position withLength:[component.text length]];
+                    }
+                    else
+                    {
+                        [self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
+                        [self applyColor:@"#FF0000" toText:attrString atPosition:component.position withLength:[component.text length]];
+                    }
+                }
+                else
+                {
+                    if (self.linkAttributes)
+                    {
+                        [self applyFontAttributes:self.linkAttributes toText:attrString atPosition:component.position withLength:[component.text length]];
+                    }
+                    else
+                    {
+                        [self applyBoldStyleToText:attrString atPosition:component.position withLength:[component.text length]];
+                        [self applySingleUnderlineText:attrString atPosition:component.position withLength:[component.text length]];
+                    }
+                }
+                
+            } else {
+                NSMutableDictionary * attributes = nil;
+                if (self.linkAttributes) {
+                    attributes = [self.linkAttributes mutableCopy];
+                    attributes[@"face"] = font;
+                } else {
+                    attributes = [@{
+                                    @"face": font,
+                                    @"size": [@(self.font.pointSize) stringValue],
+                                    @"color": [self hexStringFromColor:self.textColor]
+                                    } mutableCopy];
+                }
+                [self applyFontAttributes:attributes toText:attrString atPosition:component.position withLength:(int)[component.text length]];
+            }
 			
 			NSString *value = [component.attributes objectForKey:@"href"];
 			value = [value stringByReplacingOccurrencesOfString:@"'" withString:@""];
@@ -1054,6 +1072,19 @@
 	NSArray *components = [NSArray arrayWithObjects:[NSNumber numberWithFloat:((float) r / 255.0f)],[NSNumber numberWithFloat:((float) g / 255.0f)],[NSNumber numberWithFloat:((float) b / 255.0f)],[NSNumber numberWithFloat:1.0],nil];
 	return components;
 	
+}
+
+- (NSString *) hexStringFromColor:(UIColor *)color {
+    const CGFloat *components = CGColorGetComponents(color.CGColor);
+    
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    
+    return [NSString stringWithFormat:@"#%02lX%02lX%02lX",
+            lroundf(r * 255),
+            lroundf(g * 255),
+            lroundf(b * 255)];
 }
 
 - (NSString*)visibleText
