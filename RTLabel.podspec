@@ -12,7 +12,8 @@
     "ios": "5.0"
   },
   "source": {
-    "git": "https://github.com/paulosoaresvieira/RTLabel.git"
+    "git": "https://github.com/elijahdou/RTLabel.git",
+    "tag": "1.0.1"
   },
   "source_files": [
     "RTLabelProject/Classes",
