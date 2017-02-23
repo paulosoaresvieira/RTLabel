@@ -16,7 +16,6 @@
     "tag": "1.0.1"
   },
   "source_files": [
-    "RTLabelProject/Classes",
     "RTLabelProject/Classes/RTLabel.{h,m}"
   ],
   "requires_arc": true
