@@ -295,10 +295,13 @@
             }
 			
 			NSString *value = [component.attributes objectForKey:@"href"];
-			value = [value stringByReplacingOccurrencesOfString:@"'" withString:@""];
-			[component.attributes setObject:value forKey:@"href"];
-			
-			[links addObject:component];
+
+            if (value) {
+                value = [value stringByReplacingOccurrencesOfString:@"'" withString:@""];
+                [component.attributes setObject:value forKey:@"href"];
+                
+                [links addObject:component];
+            }
 		}
 		else if ([component.tagLabel caseInsensitiveCompare:@"u"] == NSOrderedSame || [component.tagLabel caseInsensitiveCompare:@"uu"] == NSOrderedSame)
 		{
