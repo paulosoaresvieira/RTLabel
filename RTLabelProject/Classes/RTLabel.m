@@ -1067,7 +1067,7 @@
     NSString *bString = [hexColor substringWithRange:range];  
 	
     // Scan values  
-    NSUInteger r, g, b;
+    NSUInteger r = 0, g = 0, b = 0;
     [[NSScanner scannerWithString:rString] scanHexInt:&r];  
     [[NSScanner scannerWithString:gString] scanHexInt:&g];
     [[NSScanner scannerWithString:bString] scanHexInt:&b];  
